@@ -1,0 +1,24 @@
+CREATE DATABASE COMPANY03;
+USE COMPANY03;
+CREATE TABLE Employee (
+E_id INT PRIMARY KEY,
+ E_name VARCHAR(50),
+ Age INT,
+ Salary DECIMAL(10, 2)
+ );
+ DESC Employee;
+ INSERT INTO Employee (E_id, E_name, Age, Salary)
+ VALUES
+ (1, 'kriti', 27, 58000.00),
+ (2, 'shub', 28, 62000.00),
+ (3, 'arka', 25, 73000.00),
+ (4, 'inika', 27, 74000.00),
+ (5, 'vague', 29, 65000.00);
+ 
+ SELECT COUNT(E_id) FROM Employee;
+ SELECT MAX(Age) AS MaxAge FROM Employee;
+ SELECT MIN(Age) AS MinAge FROM Employee;
+ SELECT E_name, Salary FROM Employee ORDER BY Salary ASC;
+ SELECT Salary, COUNT(*) AS EmployeeCount
+ FROM Employee
+GROUP BY Salary;
