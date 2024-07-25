@@ -1,0 +1,49 @@
+CREATE DATABASE COMPANY1;
+SHOW DATABASES;
+USE COMPANY1;
+
+CREATE TABLE EMPLOYEE7 ( 
+E_ID INT, 
+E_NAME VARCHAR(30),
+AGE INT,
+SALARY DECIMAL(10, 2)
+);
+DESC EMPLOYEE7;
+
+INSERT INTO EMPLOYEE7 VALUES (1, 'Ram', 24,10000.00);
+INSERT INTO EMPLOYEE7 VALUES (2, 'Upadhya', 21, 20000.00) ; 
+INSERT INTO EMPLOYEE7 VALUES (3, 'Agasthya', 24,30000.00) ;
+INSERT INTO EMPLOYEE7 VALUES (4, 'vani', 25,40000.00) ;
+
+SELECT * 
+FROM EMPLOYEE7;
+
+DELIMITER //
+CREATE PROCEDURE fetch_employee_data()
+BEGIN
+	DECLARE emp_id INT;
+	DECLARE emp_name VARCHAR(30);
+	DECLARE emp_age INT;
+	DECLARE emp_salary DECIMAL(10,2);
+	DECLARE emp_cursor CURSOR FOR
+SELECT E_ID,E_NAME,AGE,SALARY
+FROM EMPLOYEE7;
+DECLARE CONTINUE HANDLER FOR NOT FOUND
+SET @finished=1;
+OPEN emp_cursor;
+SET @finished=0;
+cursor_loop:LOOP
+FETCH emp_cursor INTO emp_id,emp_name,emp_age,emp_salary;
+if @finished=1 THEN
+LEAVE cursor_loop;
+END IF;
+
+SELECT CONCAT('Employee id :',emp_id,'name:',emp_name,'age:',emp_age,'salary:',emp_salary)
+AS Employee_info;
+END Loop;
+CLOSE emp_cursor;
+END//
+DELIMITER ;
+
+DROP PROCEDURE fetch_employee_data;
+CALL fetch_employee_data();
