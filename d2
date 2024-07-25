@@ -1,0 +1,25 @@
+ CREATE DATABASE COMPANY02;
+ USE COMPANY02;
+  CREATE TABLE Employee (
+ EMPNO INT,
+ ENAME VARCHAR(50),
+ JOB VARCHAR(50),
+ MGR INT,
+ SAL DECIMAL(10, 2)
+ );
+ 
+ALTER TABLE Employee ADD COLUMN COMMISSION DECIMAL(10, 2);
+ INSERT INTO Employee (EMPNO, ENAME, JOB, MGR, SAL) VALUES(201, 'eminem', 'Manager', 50, 80000,1000.00),
+ (202, 'iae', 'Developer', 100, 76000,1000.00),
+ (203, 'smith', 'Salesperson', 110, 42000,1000.00),
+ (204, 'taylor', 'analyst', 120, 68000,1000.00),
+ (205, 'neha', 'tester', 75, 54000,1000.00);
+ SELECT * FROM Employee;
+  UPDATE Employee
+ SET JOB = 'Senior Developer'
+ WHERE EMPNO = 204;
+ ALTER TABLE Employee
+CHANGE COLUMN MGR MANAGER_ID INT;
+DELETE FROM Employee
+ WHERE EMPNO = 205;
+ 
