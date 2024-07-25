@@ -1,0 +1,66 @@
+CREATE DATABASE COMPANY2;
+SHOW DATABASES;
+USE COMPANY2;
+
+CREATE TABLE n_RollCall (
+s_id INT, 
+s_name VARCHAR(30), 
+b_date DATE
+);
+
+INSERT INTO n_RollCall VALUES (1,'hari','1995-04-28');
+INSERT INTO n_RollCall VALUES (2, 'amith','1995-08-15') ; 
+INSERT INTO n_RollCall VALUES (3, 'ravi','1990-12-10') ;
+INSERT INTO n_RollCall VALUES (4,'rakesh','2000-05-18');
+INSERT INTO n_RollCall VALUES (5,'vinay','1997-09-03');
+
+SELECT * 
+FROM n_RollCall;
+
+
+CREATE TABLE O_RollCall (
+s_id INT, 
+s_name VARCHAR(30), 
+b_date DATE
+);
+
+INSERT INTO O_RollCall VALUES (1,'hari','1995-04-28');
+INSERT INTO O_RollCall VALUES (2, 'amith','1995-08-15') ; 
+INSERT INTO O_RollCall VALUES (7, 'agasthya','1991-09-13') ;
+
+DROP TABLE O_RollCall;
+SELECT * 
+FROM O_RollCall;
+
+DELIMITER //
+CREATE PROCEDURE merge_rollcall_data() BEGIN
+	DECLARE done INT DEFAULT FALSE; 
+    DECLARE n_id INT;
+	DECLARE n_name VARCHAR(30);
+	DECLARE n_b_date DATE;
+    DECLARE n_cursor CURSOR FOR
+SELECT s_id, s_name, b_date
+FROM n_RollCall;
+DECLARE CONTINUE HANDLER FOR NOT FOUND
+SET done = TRUE;
+OPEN n_cursor;
+cursor_loop: LOOP
+FETCH n_cursor INTO n_id, n_name, n_b_date;
+IF done THEN
+LEAVE cursor_loop;
+END IF;
+IF NOT EXISTS (
+SELECT 1
+FROM O_RollCall 
+WHERE s_id = n_id
+) THEN
+INSERT INTO O_RollCall (s_id, s_name, b_date) VALUES (n_id, n_name, n_b_date);
+END IF; 
+END LOOP;
+CLOSE n_cursor;
+END // 
+DELIMITER ;
+
+DROP PROCEDURE merge_rollcall_data;
+CALL merge_rollcall_data(); 
+SELECT * FROM O_RollCall;
